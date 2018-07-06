@@ -33,4 +33,16 @@ class Player
 
     score
   end
+
+  def score_overage?
+    score > MAX_SCORE
+  end
+
+  def score_for_skip?
+    score > SKIP_SCORE
+  end
+
+  protected
+
+  attr_writer :bank
 end
