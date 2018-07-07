@@ -95,4 +95,21 @@ class Game
   def finished?
     status == :finished
   end
+
+  def score_overage?
+    player.score_overage? || dealer.score_overage?
+  end
+
+  def max_cards?
+    player.cards.size == MAX_CARDS && dealer.cards.size == MAX_CARDS
+  end
+
+  def players_bank_zero?
+    player.bank.zero? || dealer.bank.zero?
+  end
+
+  protected
+
+  attr_accessor :game_bank, :deck
+  attr_writer :player, :dealer, :status, :player_turn
 end
