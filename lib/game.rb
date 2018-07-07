@@ -48,4 +48,21 @@ class Game
   def next_player_turn(player_choice)
     send ACTION_METHODS[player_choice]
   end
+
+  def next_dealer_turn
+    if dealer.score_for_skip?
+      skip_turn
+    else
+      add_card(dealer)
+    end
+  end
+
+  def finish_turn
+    self.player_turn = !player_turn
+    open_cards if score_overage? || max_cards?
+  end
+
+  def skip_turn
+    finish_turn
+  end
 end
