@@ -65,4 +65,34 @@ class Game
   def skip_turn
     finish_turn
   end
+
+  def add_card(player = self.player)
+    return if player.cards.size == MAX_CARDS
+    player.add_card(deck.take_card)
+    finish_turn
+  end
+
+  def open_cards
+    case result
+    when :win then player.deposit(game_bank)
+    when :loss then dealer.deposit(game_bank)
+    else return_bet
+    end
+
+    self.status = :finished
+  end
+
+  def result
+    return :draw if player.score == dealer.score
+    return :win if (player.score > dealer.score && player.score <= 21) || (dealer.score > 21 && player.score <= 21)
+    :loss
+  end
+
+  def in_progress?
+    status == :in_progress
+  end
+
+  def finished?
+    status == :finished
+  end
 end
