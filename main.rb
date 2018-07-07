@@ -1,3 +1,4 @@
+require_relative 'lib/interface'
 require_relative 'lib/player'
 require_relative 'lib/game'
 
