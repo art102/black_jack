@@ -7,4 +7,8 @@ class Deck
   def initialize
     @cards = build_deck
   end
+
+  def take_card
+    cards.pop
+  end
 end
