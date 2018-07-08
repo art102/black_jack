@@ -11,4 +11,16 @@ class Deck
   def take_card
     cards.pop
   end
+
+  protected
+
+  attr_writer :cards
+
+  def build_deck
+    deck = []
+    SUITS.each do |suit|
+      VALUES.each { |value| deck << Card.new(value, suit) }
+    end
+    deck.shuffle
+  end
 end

@@ -1,6 +1,7 @@
+
 class Interface
   PLAYER_ACTIONS = ['Skip', 'Add card', 'Open cards'].freeze
-  RESULT_MESSAGE = {win: 'You won', loss: 'You lose', draw: 'Draw'}.freeze
+  RESULT_MESSAGE = {win: 'Вы победили', loss: 'Вы проиграли', draw: 'Ничья'}.freeze
 
   attr_reader :game
 
