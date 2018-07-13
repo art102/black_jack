@@ -7,11 +7,10 @@ class Game
 
   attr_reader :player, :dealer, :status, :player_turn
 
-  def initialize(player)
-    @player = player
-    @player.deposit(DEFAULT_BANK)
+  def initialize
+    @player = create_player
+    # @player.deposit(DEFAULT_BANK)
     @dealer = Player.new('Дилер', DEFAULT_BANK)
-
     start_game
   end
 
@@ -24,6 +23,13 @@ class Game
     give_cards
     place_a_bet
     @status = :in_progress
+  end
+
+  def create_player
+    print "Please enter your name: "
+    player_name = gets.strip.capitalize
+    player_name = 'Anonymous' if player_name.to_s.empty?
+    Player.new(player_name, DEFAULT_BANK)
   end
 
   def give_cards

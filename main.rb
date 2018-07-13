@@ -4,14 +4,14 @@ require_relative 'lib/interface'
 require_relative 'lib/player'
 require_relative 'lib/game'
 
-puts 'Game "Black Jack"'
-print "Please enter your name: "
-player_name = gets.strip.capitalize
-player_name = 'Anonymous' if player_name.to_s.empty?
+# puts 'Game "Black Jack"'
+# print "Please enter your name: "
+# player_name = gets.strip.capitalize
+# player_name = 'Anonymous' if player_name.to_s.empty?
 
-player = Player.new(player_name)
+# player = Player.new(player_name)
 
-game = Game.new(player)
+game = Game.new
 
 interface = Interface.new(game)
 
