@@ -1,121 +1,102 @@
 class Game
-  DEFAULT_BANK = 100
-  CARDS = 2
-  BET = 10
-  MAX_CARDS = 3
-  ACTION_METHODS = %i[skip_turn add_card open_cards].freeze
-
-  attr_reader :player, :dealer, :status, :player_turn
+  attr_accessor :player, :dealer, :deck, :bank
 
   def initialize
-    @player = create_player
-    # @player.deposit(DEFAULT_BANK)
-    @dealer = Player.new('Дилер', DEFAULT_BANK)
-    start_game
+    @bank = Bank.new
+    @deck = Deck.new
+    @player = Player.new('Dealer', 100)
+    @dealer = Player.new('Дилер', 100)
   end
+
+  def start
+    print 'Как Вас зовут?: '
+    player.name = gets.chomp
+
+    loop do
+      puts "#{player.name}, сыграем в Black Jack?"
+      puts 'Да - 1  Нет - 2'
+      puts ''
+      choice = gets.chomp.to_i
+      case choice
+      when 1
+        break unless player.money > 0 && dealer.money > 0
+        start_game
+        player_choice = player_menu
+        case player_choice
+        when 1
+          dealer_turn
+        when 2
+          player_turn
+        when 3
+          open_cards
+          determining_winner
+        end
+      when 2
+        break
+      else
+        puts "#{player.name}, сыграем ещё в Black Jack?"
+        puts 'Да - 1  Нет - 2'
+      end
+    end
+  end
+
+  private
 
   def start_game
-    @game_bank = 0
-    @deck = Deck.new
-    @player_turn = true
-    player.zero_cards
-    dealer.zero_cards
-    give_cards
-    place_a_bet
-    @status = :in_progress
+    restart_game
+    2.times { player.hit(@deck) }
+    2.times { dealer.hit(@deck) }
+    bank.push(player.rate(10))
+    bank.push(dealer.rate(10))
+    player.show_cards
+    dealer.show_cards
   end
 
-  def create_player
-    print "Please enter your name: "
-    player_name = gets.strip.capitalize
-    player_name = 'Anonymous' if player_name.to_s.empty?
-    Player.new(player_name, DEFAULT_BANK)
+  def player_menu
+    puts ''
+    puts '1. Пропустить'
+    puts '2. Добавить карту' if player.total_cards < 3
+    puts '3. Открыть карты'
+    gets.chomp.to_i
   end
 
-  def give_cards
-    CARDS.times do
-      player.add_card(deck.take_card)
-      dealer.add_card(deck.take_card)
-    end
+  def player_turn
+    player.hit(@deck) if player.total_cards < 3
+    open_cards
+    determining_winner
   end
 
-  def place_a_bet
-    player.withdraw(BET)
-    dealer.withdraw(BET)
-    self.game_bank = BET * 2
-  end
-
-  def return_bet
-    player.deposit(BET)
-    dealer.deposit(BET)
-    self.game_bank = 0
-  end
-
-  def next_player_turn(player_choice)
-    send ACTION_METHODS[player_choice]
-  end
-
-  def next_dealer_turn
-    if dealer.score_for_skip?
-      skip_turn
-    else
-      add_card(dealer)
-    end
-  end
-
-  def finish_turn
-    self.player_turn = !player_turn
-    open_cards if score_overage? || max_cards?
-  end
-
-  def skip_turn
-    finish_turn
-  end
-
-  def add_card(player = self.player)
-    return if player.cards.size == MAX_CARDS
-    player.add_card(deck.take_card)
-    finish_turn
+  def dealer_turn
+    dealer.hit(@deck) if dealer.points <= 18 && dealer.total_cards < 3
+    open_cards
+    determining_winner
   end
 
   def open_cards
-    case result
-    when :win then player.deposit(game_bank)
-    when :loss then dealer.deposit(game_bank)
-    else return_bet
+    puts "#{player.name} cards: #{player.cards * ' '}"
+    puts "#{dealer.name} cards: #{dealer.cards * ' '}"
+    puts "#{player.name} points is: #{player.points}"
+    puts "#{dealer.name} points is: #{dealer.points}"
+  end
+
+  def determining_winner
+    if dealer.lose? || player.win?
+      puts "Поздравляю #{player.name}, Вы выиграли!"
+      dealer.win(bank.bank_all)
+    elsif player.lose? || dealer.win?
+      puts 'Вы проиграли'
+      player.win(bank.bank_all)
+    else
+      puts 'Попробуйте ещё раз.'
+      bet = bank.bank_all / 2
+      player.win(bet)
+      dealer.win(bet)
     end
-
-    self.status = :finished
   end
 
-  def result
-    return :draw if player.score == dealer.score
-    return :win if (player.score > dealer.score && player.score <= 21) || (dealer.score > 21 && player.score <= 21)
-    :loss
+  def restart_game
+    @deck = Deck.new
+    player.cards = []
+    dealer.cards = []
   end
-
-  def in_progress?
-    status == :in_progress
-  end
-
-  def finished?
-    status == :finished
-  end
-
-  def score_overage?
-    player.score_overage? || dealer.score_overage?
-  end
-
-  def max_cards?
-    player.cards.size == MAX_CARDS && dealer.cards.size == MAX_CARDS
-  end
-
-  def players_bank_zero?
-    player.bank.zero? || dealer.bank.zero?
-  end
-
-  protected
-
-  attr_accessor :game_bank, :deck
-  attr_writer :player, :dealer, :status, :player_turn
 end
