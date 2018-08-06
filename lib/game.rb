@@ -1,3 +1,7 @@
+require_relative 'bank'
+require_relative 'deck'
+require_relative 'player'
+
 class Game
   attr_accessor :player, :dealer, :deck, :bank
 
@@ -8,8 +12,8 @@ class Game
     @dealer = Player.new('Дилер', 100)
   end
 
-  def start
-    print 'Как Вас зовут?: '
+  def new_game
+    puts 'Как Вас зовут?'
     player.name = gets.chomp
 
     loop do
@@ -20,7 +24,7 @@ class Game
       case choice
       when 1
         break unless player.money > 0 && dealer.money > 0
-        start_game
+        beginning_game
         player_choice = player_menu
         case player_choice
         when 1
@@ -29,7 +33,7 @@ class Game
           player_turn
         when 3
           open_cards
-          determining_winner
+          determine_winner
         end
       when 2
         break
@@ -42,7 +46,7 @@ class Game
 
   private
 
-  def start_game
+  def beginning_game
     restart_game
     2.times { player.hit(@deck) }
     2.times { dealer.hit(@deck) }
@@ -63,13 +67,13 @@ class Game
   def player_turn
     player.hit(@deck) if player.total_cards < 3
     open_cards
-    determining_winner
+    determine_winner
   end
 
   def dealer_turn
     dealer.hit(@deck) if dealer.points <= 18 && dealer.total_cards < 3
     open_cards
-    determining_winner
+    determine_winner
   end
 
   def open_cards
@@ -79,16 +83,16 @@ class Game
     puts "#{dealer.name} points is: #{dealer.points}"
   end
 
-  def determining_winner
-    if dealer.lose? || player.win?
+  def determine_winner
+    if dealer.busted? || player.ochko?
       puts "Поздравляю #{player.name}, Вы выиграли!"
-      dealer.win(bank.bank_all)
-    elsif player.lose? || dealer.win?
+      dealer.win(bank.pop_all)
+    elsif player.busted? || dealer.ochko?
       puts 'Вы проиграли'
-      player.win(bank.bank_all)
+      player.win(bank.pop_all)
     else
       puts 'Попробуйте ещё раз.'
-      bet = bank.bank_all / 2
+      bet = bank.pop_all / 2
       player.win(bet)
       dealer.win(bet)
     end

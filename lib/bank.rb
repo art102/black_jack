@@ -9,7 +9,7 @@ class Bank
     @value += rate
   end
 
-  def bank_all
+  def pop_all
     value = @value
     @value = 0
     value
