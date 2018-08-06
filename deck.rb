@@ -1,26 +1,23 @@
 class Deck
-  VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'].freeze
-  SUITS = %w(♦ ♠ ♥ ♣).freeze
+  attr_accessor :cards
 
-  attr_reader :cards
+  LEAR = %w[♣ ♥ ♠ ♦].freeze
+  FACES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A'].freeze
 
   def initialize
-    @cards = build_deck
-  end
-
-  def take_card
-    cards.pop
-  end
-
-  protected
-
-  attr_writer :cards
-
-  def build_deck
-    deck = []
-    SUITS.each do |suit|
-      VALUES.each { |value| deck << Card.new(value, suit) }
+    @cards = []
+    LEAR.each do |lear|
+      FACES.each do |face|
+        @cards << Card.new(lear, face)
+      end
     end
-    deck.shuffle
+  end
+
+  def deal_card(hand)
+    hand.cards << @cards.slice!(0)
+  end
+
+  def shuffle
+    @cards.shuffle!
   end
 end
