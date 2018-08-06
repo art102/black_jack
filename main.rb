@@ -7,4 +7,3 @@ require_relative './lib/card.rb'
 
 game = Game.new
 game.start
-
