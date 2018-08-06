@@ -1,22 +1,15 @@
 class Card
-  COSTS = {'J' => 10, 'Q' => 10, 'K' => 10, 'A' => 11}.freeze
-
-  attr_reader :value, :suit
-
-  def initialize(value, suit)
-    @value = value
-    @suit = suit
+  def initialize(lear, face)
+    @lear = lear
+    @face = face
   end
 
-  def to_s
-    "#{value}#{suit}"
+  def value
+    return @face if @face.is_a?(Integer)
+    @face.eql?('A') ? 11 : 10
   end
 
-  def cost
-    COSTS.fetch(value, value)
-  end
-
-  def ace_cost
-    value == 'A' ? 1 : cost
+  def display
+    "#{@face}#{@lear}"
   end
 end
