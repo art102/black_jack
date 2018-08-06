@@ -5,44 +5,46 @@ require_relative 'player'
 class Game
   attr_accessor :player, :dealer, :deck, :bank
 
-  def initialize
+  def initialize(interface)
+    # @interface = interface
     @bank = Bank.new
     @deck = Deck.new
     @player = Player.new('Dealer', 100)
     @dealer = Player.new('Дилер', 100)
+    interface.greeting(player, dealer)
   end
 
-  def new_game
-    puts 'Как Вас зовут?'
-    player.name = gets.chomp
+  # def new_game
+  #   puts 'Как Вас зовут?'
+  #   player.name = gets.chomp
 
-    loop do
-      puts "#{player.name}, сыграем в Black Jack?"
-      puts 'Да - 1  Нет - 2'
-      puts ''
-      choice = gets.chomp.to_i
-      case choice
-      when 1
-        break unless player.money > 0 && dealer.money > 0
-        beginning_game
-        player_choice = player_menu
-        case player_choice
-        when 1
-          dealer_turn
-        when 2
-          player_turn
-        when 3
-          open_cards
-          determine_winner
-        end
-      when 2
-        break
-      else
-        puts "#{player.name}, сыграем ещё в Black Jack?"
-        puts 'Да - 1  Нет - 2'
-      end
-    end
-  end
+  #   loop do
+  #     puts "#{player.name}, сыграем в Black Jack?"
+  #     puts 'Да - 1  Нет - 2'
+  #     puts ''
+  #     choice = gets.chomp.to_i
+  #     case choice
+  #     when 1
+  #       break unless player.money > 0 && dealer.money > 0
+  #       beginning_game
+  #       player_choice = player_menu
+  #       case player_choice
+  #       when 1
+  #         dealer_turn
+  #       when 2
+  #         player_turn
+  #       when 3
+  #         open_cards
+  #         determine_winner
+  #       end
+  #     when 2
+  #       break
+  #     else
+  #       puts "#{player.name}, сыграем ещё в Black Jack?"
+  #       puts 'Да - 1  Нет - 2'
+  #     end
+  #   end
+  # end
 
   private
 
@@ -56,13 +58,13 @@ class Game
     dealer.show_cards
   end
 
-  def player_menu
-    puts ''
-    puts '1. Пропустить'
-    puts '2. Добавить карту' if player.total_cards < 3
-    puts '3. Открыть карты'
-    gets.chomp.to_i
-  end
+  # def player_menu
+  #   puts ''
+  #   puts '1. Пропустить'
+  #   puts '2. Добавить карту' if player.total_cards < 3
+  #   puts '3. Открыть карты'
+  #   gets.chomp.to_i
+  # end
 
   def player_turn
     player.hit(@deck) if player.total_cards < 3
@@ -85,13 +87,13 @@ class Game
 
   def determine_winner
     if dealer.busted? || player.ochko?
-      puts "Поздравляю #{player.name}, Вы выиграли!"
+      "Поздравляю #{player.name}, Вы выиграли!"
       dealer.win(bank.pop_all)
     elsif player.busted? || dealer.ochko?
-      puts 'Вы проиграли'
+      'Вы проиграли'
       player.win(bank.pop_all)
     else
-      puts 'Попробуйте ещё раз.'
+      'Попробуйте ещё раз.'
       bet = bank.pop_all / 2
       player.win(bet)
       dealer.win(bet)

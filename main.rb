@@ -1,4 +1,7 @@
-require './lib/game'
+require_relative './lib/game'
+require_relative './lib/interface'
 
-game = Game.new
-game.new_game
+interface = Interface.new
+
+game = Game.new(interface)
+
