@@ -1,9 +1,6 @@
-require_relative './lib/game.rb'
-require_relative './lib/bank.rb'
-require_relative './lib/deck.rb'
-require_relative './lib/player.rb'
-require_relative './lib/hand'
-require_relative './lib/card.rb'
+require_relative 'card.rb'
+require_relative 'deck.rb'
+require_relative 'hand.rb'
+require_relative 'game.rb'
 
-game = Game.new
-game.start
+Game.new
