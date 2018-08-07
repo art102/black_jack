@@ -12,6 +12,7 @@ class Game
     @player = Player.new('Dealer', 100)
     @dealer = Player.new('Дилер', 100)
     interface.greeting(player, dealer)
+    @user_input = interface.get_user_input
   end
 
   # def new_game
@@ -48,14 +49,18 @@ class Game
 
   private
 
-  def beginning_game
-    restart_game
-    2.times { player.hit(@deck) }
-    2.times { dealer.hit(@deck) }
-    bank.push(player.rate(10))
-    bank.push(dealer.rate(10))
-    player.show_cards
-    dealer.show_cards
+  attr_reader :user_input
+
+  def beginning_game(user_input)
+    if user_input
+      restart_game
+      2.times { player.hit(@deck) }
+      2.times { dealer.hit(@deck) }
+      bank.push(player.rate(10))
+      bank.push(dealer.rate(10))
+      player.show_cards
+      dealer.show_cards
+    end
   end
 
   # def player_menu
