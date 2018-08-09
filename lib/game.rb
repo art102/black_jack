@@ -11,9 +11,33 @@ class Game
     @deck = Deck.new
     @player = Player.new('Dealer', 100)
     @dealer = Player.new('Дилер', 100)
+    @interface = interface
     interface.greeting(player, dealer)
-    @user_input = interface.get_user_input
+    start_game
+    # @user_input = interface.get_user_input
   end
+
+  def start_game
+    restart_game
+    2.times { player.hit(@deck) }
+    2.times { dealer.hit(@deck) }
+    bank.push(player.rate(10))
+    bank.push(dealer.rate(10))
+    player.show_cards
+    dealer.show_cards
+    loop do
+      @interface.player_menu(player)
+      actions
+      @interface.repeat_question
+      restart_game if @interface.answer_player == 'yes'
+    end
+  end
+
+  # beginning_game(@player, @dealer)
+
+  # def start_game
+  #   @interface
+  # end
 
   # def new_game
   #   puts 'Как Вас зовут?'
@@ -49,19 +73,27 @@ class Game
 
   private
 
-  attr_reader :user_input
-
-  def beginning_game(user_input)
-    if user_input
-      restart_game
-      2.times { player.hit(@deck) }
-      2.times { dealer.hit(@deck) }
-      bank.push(player.rate(10))
-      bank.push(dealer.rate(10))
-      player.show_cards
-      dealer.show_cards
+  def actions
+    case @interface.player_choice
+    when 1
+      dealer_turn
+    when 2
+      player_turn
+    when 3
+      open_cards
+      determine_winner
     end
   end
+
+  # def beginning_game
+  #   restart_game
+  #   2.times { player.hit(@deck) }
+  #   2.times { dealer.hit(@deck) }
+  #   bank.push(player.rate(10))
+  #   bank.push(dealer.rate(10))
+  #   player.show_cards
+  #   dealer.show_cards
+  # end
 
   # def player_menu
   #   puts ''
@@ -91,14 +123,14 @@ class Game
   end
 
   def determine_winner
-    if dealer.busted? || player.ochko?
-      "Поздравляю #{player.name}, Вы выиграли!"
+    if dealer.busted? || player.ochko? 
+      @interface.winner_player
       dealer.win(bank.pop_all)
     elsif player.busted? || dealer.ochko?
-      'Вы проиграли'
+      @interface.faile_message
       player.win(bank.pop_all)
     else
-      'Попробуйте ещё раз.'
+      @interface.try_again
       bet = bank.pop_all / 2
       player.win(bet)
       dealer.win(bet)
