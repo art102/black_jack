@@ -68,7 +68,7 @@ class Interface
   # end
 
   def repeat_question
-    puts "Сыграем еще?(y/n): "
+    print "Сыграем еще?(y/n): "
     @answer_player = gets.strip.downcase
   end
 
@@ -78,6 +78,15 @@ class Interface
     puts '2. Добавить карту' if player.total_cards < 3
     puts '3. Открыть карты'
     @player_choice = gets.chomp.to_i
+  end
+
+  def open_cards
+    puts "#{@player.name} cards: #{@player.cards * ' '}"
+    puts "#{@dealer.name} cards: #{@dealer.cards * ' '}"
+    puts ""
+    puts "#{@player.name} points is: #{@player.points}"
+    puts "#{@dealer.name} points is: #{@dealer.points}"
+    puts ""
   end
 
   def winner_player

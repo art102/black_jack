@@ -29,7 +29,11 @@ class Game
       @interface.player_menu(player)
       actions
       @interface.repeat_question
-      restart_game if @interface.answer_player == 'yes'
+      if @interface.answer_player == 'y'
+        start_game
+      else
+        exit
+      end
     end
   end
 
@@ -80,7 +84,8 @@ class Game
     when 2
       player_turn
     when 3
-      open_cards
+      #open_cards
+      @interface.open_cards
       determine_winner
     end
   end
@@ -105,22 +110,22 @@ class Game
 
   def player_turn
     player.hit(@deck) if player.total_cards < 3
-    open_cards
+    @interface.open_cards
     determine_winner
   end
 
   def dealer_turn
     dealer.hit(@deck) if dealer.points <= 18 && dealer.total_cards < 3
-    open_cards
+    @interface.open_cards
     determine_winner
   end
 
-  def open_cards
-    puts "#{player.name} cards: #{player.cards * ' '}"
-    puts "#{dealer.name} cards: #{dealer.cards * ' '}"
-    puts "#{player.name} points is: #{player.points}"
-    puts "#{dealer.name} points is: #{dealer.points}"
-  end
+  # def open_cards
+  #   puts "#{player.name} cards: #{player.cards * ' '}"
+  #   puts "#{dealer.name} cards: #{dealer.cards * ' '}"
+  #   puts "#{player.name} points is: #{player.points}"
+  #   puts "#{dealer.name} points is: #{dealer.points}"
+  # end
 
   def determine_winner
     if dealer.busted? || player.ochko? 
