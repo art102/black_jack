@@ -21,11 +21,11 @@ module Hand
     @cards << deck.cards.pop
   end
 
-  def busted?
-    points > 21
-  end
+  # def busted?
+  #   points > 21
+  # end
 
-  def ochko?
-    points == 21
-  end
+  # def ochko?
+  #   points == 21
+  # end
 end
