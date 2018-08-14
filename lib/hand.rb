@@ -4,7 +4,7 @@ module Hand
 
     cards.each do |card|
       points += if card.value == 'A'
-                  10
+                  11
                 elsif card.value.to_i.zero?
                   10
                 else
@@ -20,12 +20,4 @@ module Hand
   def hit(deck)
     @cards << deck.cards.pop
   end
-
-  # def busted?
-  #   points > 21
-  # end
-
-  # def ochko?
-  #   points == 21
-  # end
 end

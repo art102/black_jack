@@ -8,7 +8,7 @@ class Game
   def initialize(interface)
     @bank = Bank.new
     @deck = Deck.new
-    @player = Player.new('Dealer', 100)
+    @player = Player.new('Player', 100)
     @dealer = Player.new('Дилер', 100)
     @interface = interface
     interface.greeting(player, dealer)
@@ -21,8 +21,7 @@ class Game
     2.times { dealer.hit(@deck) }
     bank.push(player.rate(10))
     bank.push(dealer.rate(10))
-    player.show_cards
-    dealer.show_cards
+    @interface.show_cards
     loop do
       @interface.player_menu(player)
       actions

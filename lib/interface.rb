@@ -32,6 +32,11 @@ class Interface
     puts ""
   end
 
+  def show_cards
+    puts "#{@player.name} cards: #{@player.cards * ' '}"
+    puts "#{@dealer.name} cards: #{@dealer.cards.collect { |_card| _card = '*' } * ' '}"
+  end
+
   def winner
     puts "Поздравляю, Вы выиграли!"
   end
