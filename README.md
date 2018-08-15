@@ -6,7 +6,7 @@ This is a console game of BlackJack
   You should execute: 
   `$ ruby main.rb`
 
-#### Example
+#### Example:
 ```
 emet_braun@laptop:black_jack$ ruby main.rb 
 Как Вас зовут?
@@ -27,3 +27,4 @@ Emet points is: 22
 Вы проиграли!
 Сыграем еще?(y/n): 
 ```
+Enjoy it :+1:
