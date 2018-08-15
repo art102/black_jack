@@ -60,21 +60,6 @@ class Game
     determine_winner
   end
 
-  # def determine_winner
-  #   if dealer.busted? || player.ochko? 
-  #     @interface.winner_player
-  #     dealer.win(bank.pop_all)
-  #   elsif player.busted? || dealer.ochko?
-  #     @interface.faile_message
-  #     player.win(bank.pop_all)
-  #   else
-  #     @interface.try_again
-  #     bet = bank.pop_all / 2
-  #     player.win(bet)
-  #     dealer.win(bet)
-  #   end
-  # end
-
   def determine_winner
     if @player.points > 21 || @player.points < @dealer.points && @dealer.points <= 21
       @interface.faile_message
