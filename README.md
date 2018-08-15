@@ -2,6 +2,6 @@
 ## black_jack - Final project on ruby
 
 This is a console game of BlackJack
-How to start?
+### How to start?
   You should execute: 
-  $ ruby main.rb
+  `$ ruby main.rb`
