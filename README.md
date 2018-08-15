@@ -27,4 +27,4 @@ Emet points is: 22
 Вы проиграли!
 Сыграем еще?(y/n): 
 ```
-Enjoy it :+1:
+Enjoy it! :+1:
